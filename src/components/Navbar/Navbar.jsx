@@ -1,14 +1,22 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import css from "./NavBar.module.css";
+import clsx from "clsx";
 
-const Navbar = () => {
-  return (
-    <nav>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/catalog">Catalog</Link></li>
-      </ul>
-    </nav>
-  );
+const active = ({ isActive }) => {
+  return clsx(css.navLink, isActive && css.active);
 };
 
-export default Navbar;
+export default function Navigation() {
+  return (
+    <>
+      <nav className={css.nav}>
+        <NavLink to="/" className={active}>
+          Home
+        </NavLink>
+        <NavLink to="/catalog" className={active}>
+          Catalog
+        </NavLink>
+      </nav>
+    </>
+  );
+}

@@ -1,5 +1,10 @@
-const Loader = () => {
-  return <div>Loading...</div>;
-};
+import { RingLoader } from "react-spinners";
+import css from "./Loader.module.css";
 
-export default Loader;
+export default function Loader() {
+  return (
+    <div className={css.loader}>
+      <RingLoader color="red" size={80} aria-label="RingLoader" />
+    </div>
+  );
+}

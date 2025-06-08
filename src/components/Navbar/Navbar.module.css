@@ -1,0 +1,23 @@
+.nav {
+  display: flex;
+  font-weight: 500;
+  font-size: 16px;
+  gap: 32px;
+  justify-content: flex-start;
+  line-height: 1.5;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navLink {
+  text-decoration: none;
+  transition: color 200ms ease-in-out, transform 300ms ease-in-out;
+  color: var(--main);
+}
+
+
+.active {
+  color: var(--button-hover);
+
+}

@@ -1,0 +1,46 @@
+.title {
+    color: var(--main);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.33;
+    max-width: 360px;
+}
+
+.description {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.nav {
+    display: flex;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.2;
+    margin-top: 60px;
+    gap: 40px;
+    position: relative;
+}
+
+.nav::after {
+    content: '';
+    position: absolute;
+    left: 0px;
+    bottom: -24px;
+    width: 100%;
+    height: 1px;
+    background-color: var(--gray-light);
+}
+
+.link {
+    text-decoration: none;
+    color: var(--main);
+}
+
+.activeLink {
+    text-decoration: underline;
+    text-decoration-color: var(--button-hover);
+    text-decoration-thickness: 4px;
+    text-underline-offset: 25px;
+}
