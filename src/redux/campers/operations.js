@@ -1,11 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchCampers, fetchCamperDetails } from "../../services/api";
+import {
+  fetchCampers,
+  fetchCamperDetails,
+} from "../../services/api";
 
 export const getCampers = createAsyncThunk(
   "campers/fetchAll",
-  async (filters, thunkApi) => {
+  async (paramsArg = {}, thunkApi) => {
     try {
-      const response = await fetchCampers(filters);
+      const { append, ...params } = paramsArg;
+      const response = await fetchCampers(params);
       return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error.message);

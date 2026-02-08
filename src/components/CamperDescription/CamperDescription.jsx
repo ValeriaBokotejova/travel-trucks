@@ -1,17 +1,17 @@
 import { useSelector } from "react-redux";
-import { Navigate, NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 import clsx from "clsx";
+
 import css from "./CamperDescription.module.css";
 import { getSelectedCamper } from "../../redux/campers/selectors";
 import Gallery from "../Gallery/Gallery";
 import CamperInfo from "../CamperInfo/CamperInfo";
-import DetailsFeatures from "../DetailsFeatures/DetailsFeatures";
-import Reviews from "../Reviews/Reviews";
 
 const activeLink = ({ isActive }) => clsx(css.link, isActive && css.activeLink);
 
 export default function CamperDescription() {
   const camper = useSelector(getSelectedCamper);
+  const { id } = useParams();
 
   if (!camper) {
     return <p>Camper data is not available.</p>;
@@ -36,19 +36,15 @@ export default function CamperDescription() {
       <p className={css.description}>{description}</p>
 
       <nav className={css.nav}>
-        <NavLink className={activeLink} to="features">
+        <NavLink className={activeLink} to={`/catalog/${id}/features`}>
           Features
         </NavLink>
-        <NavLink className={activeLink} to="reviews">
+        <NavLink className={activeLink} to={`/catalog/${id}/reviews`}>
           Reviews
         </NavLink>
       </nav>
 
-      <Routes>
-        <Route path="" element={<Navigate to="features" />} />
-        <Route path="features" element={<DetailsFeatures />} />
-        <Route path="reviews" element={<Reviews />} />
-      </Routes>
+      <Outlet />
     </section>
   );
 }

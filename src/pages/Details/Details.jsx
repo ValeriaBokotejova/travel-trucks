@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useDispatch } from "react-redux";
-import { useParams, Outlet } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { getCamperDetails } from "../../redux/campers/operations";
 import css from "./Details.module.css";
@@ -20,10 +20,11 @@ const Details = () => {
       <Helmet>
         <title>Details</title>
       </Helmet>
+
       <Toaster position="top-center" reverseOrder={false} />
+
       <section className={css.detailed_container}>
         <CamperDescription />
-        <Outlet />
       </section>
     </>
   );

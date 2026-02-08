@@ -10,23 +10,32 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+
 import campersReducer from "./campers/slice";
 import filtersReducer from "./filters/slice";
+import favoritesReducer from "./favorites/slice";
 
 const filtersPersistConfig = {
   key: "filters",
   storage,
 };
 
-const persistedFiltersReducer = persistReducer(
-  filtersPersistConfig,
-  filtersReducer
+const favoritesPersistConfig = {
+  key: "favorites",
+  storage,
+};
+
+const persistedFiltersReducer = persistReducer(filtersPersistConfig, filtersReducer);
+const persistedFavoritesReducer = persistReducer(
+  favoritesPersistConfig,
+  favoritesReducer
 );
 
 export const store = configureStore({
   reducer: {
     campers: campersReducer,
     filters: persistedFiltersReducer,
+    favorites: persistedFavoritesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

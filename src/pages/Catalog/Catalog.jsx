@@ -1,28 +1,58 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
+
 import { getCampers } from "../../redux/campers/operations";
+import {
+  getCampersList,
+  getHasMore,
+  getPage,
+  isLoading,
+} from "../../redux/campers/selectors";
+import { getFiltersParams } from "../../redux/filters/selectors";
+
 import CampersList from "../../components/CampersList/CampersList";
 import Filter from "../../components/Filter/Filter";
+
 import css from "./Catalog.module.css";
-import { getFilteredCampers, isLoading } from "../../redux/campers/selectors";
 
 const Catalog = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilteredCampers);
+
+  const list = useSelector(getCampersList);
   const loading = useSelector(isLoading);
-  const [visibleCount, setVisibleCount] = useState(4);
+  const hasMore = useSelector(getHasMore);
+  const page = useSelector(getPage);
+  const filters = useSelector(getFiltersParams);
 
   useEffect(() => {
-    dispatch(getCampers());
+    dispatch(
+      getCampers({
+        page: 1,
+        limit: 4,
+        append: false,
+      })
+    );
   }, [dispatch]);
 
-  useEffect(() => {
-    setVisibleCount(4);
-  }, [filter]);
+  const onLoadMore = () => {
+    const nextPage = page + 1;
 
-  const onClickButton = () => {
-    setVisibleCount((prevCount) => prevCount + 4);
+    const featuresParams = {};
+    (filters.features || []).forEach((f) => {
+      featuresParams[f] = true;
+    });
+
+    dispatch(
+      getCampers({
+        page: nextPage,
+        limit: 4,
+        location: filters.location || "",
+        form: filters.form || "",
+        ...featuresParams,
+        append: true,
+      })
+    );
   };
 
   return (
@@ -30,12 +60,18 @@ const Catalog = () => {
       <Helmet>
         <title>Catalog</title>
       </Helmet>
+
       <section className={css.container}>
         <Filter />
-        <CampersList list={filter.slice(0, visibleCount)} />
+        <CampersList list={list} />
       </section>
-      {!loading && visibleCount < filter.length && (
-        <button className={css.button} type="button" onClick={onClickButton}>
+
+      {!loading && hasMore && (
+        <button
+          className={css.button}
+          type="button"
+          onClick={onLoadMore}
+        >
           Load more
         </button>
       )}

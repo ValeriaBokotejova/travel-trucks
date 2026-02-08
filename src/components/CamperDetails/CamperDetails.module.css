@@ -78,3 +78,12 @@
 .showMoreButton:hover {
     background-color: var(--button-hover);
 }
+
+.favButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

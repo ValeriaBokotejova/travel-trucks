@@ -2,8 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-import { getFilteredItems } from "../../redux/filters/selectors";
+import { getFiltersState } from "../../redux/filters/selectors";
 import { updateFilters } from "../../redux/filters/slice";
+import { getCampers } from "../../redux/campers/operations";
 
 import css from "./Filter.module.css";
 import icons from "../../assets/sprite.svg";
@@ -14,11 +15,12 @@ const LocationSchema = Yup.object().shape({
 
 export default function FilterBar() {
   const dispatch = useDispatch();
-  const filters = useSelector(getFilteredItems);
+  const filters = useSelector(getFiltersState);
 
   return (
     <div className={css.filterWrapper}>
       <Formik
+        enableReinitialize
         initialValues={{
           location: filters.location,
           form: filters.form,
@@ -27,9 +29,25 @@ export default function FilterBar() {
         validationSchema={LocationSchema}
         onSubmit={(values) => {
           dispatch(updateFilters(values));
+          // features[] -> query params (AC=true, kitchen=true ...)
+          const featuresParams = {};
+          (values.features || []).forEach((f) => {
+            featuresParams[f] = true;
+          });
+
+          dispatch(
+            getCampers({
+              page: 1,
+              limit: 4,
+              location: values.location || "",
+              form: values.form || "",
+              ...featuresParams,
+              append: false,
+            })
+          );
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors }) => (
           <Form>
             <div className={css.inputWrapper}>
               <label className={css.filterTitle} htmlFor="location">
@@ -45,17 +63,15 @@ export default function FilterBar() {
                 <use href={`${icons}#Map`} />
               </svg>
             </div>
+
             {errors.location ? (
               <div className={css.errorMessage}>{errors.location}</div>
             ) : null}
 
             <p className={css.filterTitle}>Filters</p>
+
             <h3 className={css.equipmentTitle}>Vehicle equipment</h3>
-            <div
-              role="group"
-              aria-labelledby="features-group"
-              className={css.groupWrapper}
-            >
+            <div role="group" className={css.groupWrapper}>
               <label>
                 <Field type="checkbox" name="features" value="AC" />
                 <p>
@@ -65,15 +81,7 @@ export default function FilterBar() {
                   AC
                 </p>
               </label>
-              <label>
-                <Field type="checkbox" name="features" value="automatic" />
-                <p>
-                  <svg width="20" height="30">
-                    <use href={`${icons}#diagram`} />
-                  </svg>
-                  Automatic
-                </p>
-              </label>
+
               <label>
                 <Field type="checkbox" name="features" value="kitchen" />
                 <p>
@@ -83,6 +91,7 @@ export default function FilterBar() {
                   Kitchen
                 </p>
               </label>
+
               <label>
                 <Field type="checkbox" name="features" value="TV" />
                 <p>
@@ -92,6 +101,7 @@ export default function FilterBar() {
                   TV
                 </p>
               </label>
+
               <label>
                 <Field type="checkbox" name="features" value="bathroom" />
                 <p>
@@ -101,14 +111,11 @@ export default function FilterBar() {
                   Bathroom
                 </p>
               </label>
+
             </div>
 
             <h3 className={css.equipmentTitle}>Vehicle type</h3>
-            <div
-              role="group"
-              aria-labelledby="form-group"
-              className={css.groupWrapper}
-            >
+            <div role="group" className={css.groupWrapper}>
               <label>
                 <Field type="radio" name="form" value="panelTruck" />
                 <p>
@@ -118,6 +125,7 @@ export default function FilterBar() {
                   Van
                 </p>
               </label>
+
               <label>
                 <Field type="radio" name="form" value="fullyIntegrated" />
                 <p>
@@ -127,6 +135,7 @@ export default function FilterBar() {
                   Fully Integrated
                 </p>
               </label>
+
               <label>
                 <Field type="radio" name="form" value="alcove" />
                 <p>
@@ -137,9 +146,6 @@ export default function FilterBar() {
                 </p>
               </label>
             </div>
-            {errors.bodyType && touched.bodyType ? (
-              <div className={css.error}>{errors.bodyType}</div>
-            ) : null}
 
             <button className={css.searchButton} type="submit">
               Search
