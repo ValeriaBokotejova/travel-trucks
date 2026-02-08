@@ -1,27 +1,69 @@
-# TravelTrucks Frontend
+# TravelTrucks 🚐🚐🚐
 
-A React + Vite application for renting camper vans.
+**TravelTrucks** - a camper rental web app.
 
-## 🚀 Project Overview
+## Features
 
-This project is a frontend application for TravelTrucks that allows users to:
-- View available camper vans
-- Filter camper vans by location, body type, and features
-- Add camper vans to favorites
-- View details of each camper with reviews and a booking form
-- Responsive UI with Redux state management
+- **Home page (`/`)**
+  - Banner with CTA button **"View Now"** that navigates to the catalog.
 
-## 📁 Project Structure
+- **Catalog page (`/catalog`)**
+  - Displays a list of available campers from the API.
+  - **Filters**:
+    - Location (text input)
+    - Vehicle type (single select)
+    - Vehicle equipment (multiple select: AC, kitchen, bathroom, TV, etc.)
+  - **Favorites**
+    - Add/remove campers to favorites.
+    - Favorites are **persisted after page refresh** (redux-persist/localStorage).
+  - **Load More**
+    - Button **"Load more"** to show more camper cards.
 
-- `/` — Home page
-- `/catalog` — Camper catalog with filters and Load More button
-- `/catalog/:id` — Camper details page with reviews and booking form
+- **Camper details page (`/catalog/:id`)**
+  - Detailed camper info + image gallery.
+  - Camper characteristics (if present): `transmission, engine, AC, bathroom, kitchen, TV, radio, refrigerator, microwave, gas, water`
+  - Camper details (if present): `form, length, width, height, tank, consumption`
+  - **Reviews**
+    - Reviews shown with **5-star rating** UI.
+  - **Booking form**
+    - Booking form with success notification.
 
-## 🛠️ Tech Stack
+## 🔗 API
+
+Uses the provided backend API:
+- `GET /campers`
+- `GET /campers/:id`
+
+Base URL:
+`https://66b1f8e71ca8ad33d4f5f63e.mockapi.io`
+
+## Tech Stack
 
 - React + Vite
-- Redux Toolkit for state management
-- React Router for routing
-- Axios for API calls
-- react-helmet-async for head management
-- CSS Modules for styling
+- Redux Toolkit
+- redux-persist (favorites persistence)
+- React Router
+- Axios
+- Formik + Yup (forms/validation)
+- react-helmet-async
+- CSS Modules
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## 🌍 Deploy
+
+Deployed on Vercel:  
+
+[🔗 Travel Trucks - Live Demo](https://travel-trucks-dun.vercel.app/)
